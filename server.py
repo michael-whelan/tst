@@ -1,9 +1,8 @@
 #!/usr/bin/python
 # coding=utf-8
 
-import http.server
-from http.server import HTTPServer
-from http.server import BaseHTTPRequestHandler
+from BaseHTTPServer import HTTPServer
+from BaseHTTPServer import BaseHTTPRequestHandler
 import os
 from os import curdir, sep
 import json
@@ -12,7 +11,10 @@ import db_init
 import db
 import codecs
 import cgi
-import urllib.parse
+import urlparse
+
+
+
 
 if not os.path.isfile('db.sqlite3'):
 	db_init.init()
@@ -20,9 +22,7 @@ if not os.path.isfile('db.sqlite3'):
 PORT = 3000
 
 class Handler (BaseHTTPRequestHandler) :
-
 	def do_GET(self) :
-		print("get recieved")
 		# Look for main page
 		if self.path=="/":
 			self.path="/index.html"
@@ -87,15 +87,14 @@ class Handler (BaseHTTPRequestHandler) :
 			length = int(self.headers.getheader('content-length'))
 			# Get form data
 			postvars = urlparse.parse_qs(self.rfile.read(length), keep_blank_values=1)
-
 			# Init data
 			name = postvars.get('name')[0]
 			desc = postvars.get('description')[0]
 			price = float(postvars.get('price')[0])
 
 			# Send request to DB
-			db.putOne(name, desc, price)
-
+			#db.putOne(name, desc, price)
+			print(name, desc, price)
 			# Send code 200
 			self.send_response(200)
 			self.end_headers()
