@@ -22,6 +22,13 @@ if not os.path.isfile('db.sqlite3'):
 PORT = 3000
 
 class Handler (BaseHTTPRequestHandler) :
+	def do_OPTIONS(self):
+		self.send_response(200, "ok")
+		self.send_header('Access-Control-Allow-Origin', '*')
+		self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
+		self.send_header("Access-Control-Allow-Headers", "X-Requested-With")
+		self.send_header("Access-Control-Allow-Headers", "Content-Type")
+		self.end_headers()
 	def do_GET(self) :
 		# Look for main page
 		if self.path=="/":
@@ -93,8 +100,8 @@ class Handler (BaseHTTPRequestHandler) :
 			price = float(postvars.get('price')[0])
 
 			# Send request to DB
-			#db.putOne(name, desc, price)
-			print(name, desc, price)
+			db.putOne(name, desc, price)
+			#print(name, desc, price)
 			# Send code 200
 			self.send_response(200)
 			self.end_headers()

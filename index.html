@@ -14,17 +14,14 @@
         <meta name='viewport' content='width=device-width, initial-scale=1.0'>       
     </head>
     <body>
-	<button id = "btn1" onclick = "doGet('http://localhost:3000/products')">
+	<button id = "btn1" onclick = "doGet('GET','http://localhost:3000/products', fillTable)">
 	Press me to GET
 	</button>
     <br>
     <input id = "summaryTableBtn" type = "button" value = "Show Table"  onclick = "displaySummaryTable()" disabled = "true">
     <br><br>
     <table id="summaryTable" class="display" width="100%"></table> 
-    <button id = "btnCreateForm" onclick = "newWindow()">
-        Create form
-        </button><br><br>
-    <form id ="newProductForm" method = "POST" action = "http://localhost:3000/product">
+    <form id ="newProductForm" method = "POST" target ="hiddenFrame"action = "http://localhost:3000/product">
         <label>Name:</label>
         <input id ="newName" type ="text"/><br>
         <label>Price:</label>
@@ -35,6 +32,30 @@
         <button id = "btnNewEntry" onclick = "post()">
         Press me to add a product
         </button>
+		<iframe name='hiddenFrame'  style='display:none'></iframe>
     </form>
+	<div id ="controlSingleProd">
+		<label>Input ID</label>
+		<input type = "number" id = "lookUpID"/><br><br>
+		<label>InputName</label>
+		<input type = "text" id ="newName"/><br><br>
+		<label>Input Description</label>
+		<input type = "text" id = "newDescription"/><br><br>
+		<label>Input Price</label>
+		<input type = "number" id ="newPrice"/><br>
+		<div id ="prodHolder"></div>
+		<input type ="button" value="View" onclick="doGet('GET','http://localhost:3000/product/'+getValue('lookUpID'),displaySingleProd)"/>
+		<input type ="button" value="Update"/>
+		<input type ="button" value="Delete" onclick = "doGet('DELETE','http://localhost:3000/product/'+getValue('lookUpID'),logResp)"/>
+	</div>
+	
+	
+	<script>
+		function getValue( id){
+			var val = document.getElementById(id).value;
+			return val;
+		}
+	</script>
+	
     </body>
 </html>

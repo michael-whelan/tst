@@ -1,18 +1,17 @@
 function doPost(theUrl){
 	//var obj = createJson();
 	var http = new XMLHttpRequest();
-var params = createJson();
-http.open("POST", theUrl, false);
-console.log(params);
-//Send the proper header information along with the request
-http.setRequestHeader("Content-type", "application/json");
+	var params = createJson();
+	http.open("POST", theUrl, false);
+	//Send the proper header information along with the request
+	http.setRequestHeader("Content-type", "application/json");
 
-http.onreadystatechange = function() {//Call a function when the state changes.
-    if(http.readyState == 4 && http.status == 200) {
-        alert(http.responseText);
-    }
-}
-http.send(params);
+	http.onreadystatechange = function() {//Call a function when the state changes.
+		if(http.readyState == 4 && http.status == 200) {
+			alert(http.responseText);
+		}
+	}
+	http.send(params);
 }
 
 function createJson(){
@@ -23,12 +22,6 @@ function createJson(){
 	
 	return {"name": [name],"description": [desc],"price": [price]};	
 	
-}
-
-function newWindow(){
-		var win = window.open("", "Title=title", "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=200, height=200, top="+(screen.height-400)+", left="+(screen.width-840));
-		var btn = document.createElement("button");
-		win.document.body.appendChild(btn);
 }
 
 
@@ -52,23 +45,34 @@ function post() {
 
     //document.body.appendChild(form);
     form.submit();
+	form.style.display="none";
 }
 
+function displaySingleProd(json){
+	console.log(json);
+	//prodHolder
+	
+}
 
+function logResp(json){
+	console.log(json);
+}
 
-
-
-
-function doGet(theUrl){
+function doGet(endPoint,theUrl,callBack){
 	var xhr = new XMLHttpRequest();
 	var response;
 	xhr.onreadystatechange = function() {
 	    if (xhr.readyState == XMLHttpRequest.DONE) {
 	        response =xhr.responseText;
-	        fillTable(JSON.parse(response));
+			if(endPoint=="DELETE"){
+				console.log(response);
+			}else{
+				callBack(JSON.parse(response));
+			}
 	    }
 	}
-	xhr.open('GET', theUrl, true);
+	console.log(endPoint, theUrl);
+	xhr.open(endPoint, theUrl, true);
 	xhr.send(null);
 }
 
