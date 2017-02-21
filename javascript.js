@@ -1,19 +1,3 @@
-function doPost(theUrl){
-	//var obj = createJson();
-	var http = new XMLHttpRequest();
-	var params = createJson();
-	http.open("POST", theUrl, false);
-	//Send the proper header information along with the request
-	http.setRequestHeader("Content-type", "application/json");
-
-	http.onreadystatechange = function() {//Call a function when the state changes.
-		if(http.readyState == 4 && http.status == 200) {
-			alert(http.responseText);
-		}
-	}
-	http.send(params);
-}
-
 function createJson(){
 	var name = document.getElementById("newName").value;
 	var price = document.getElementById("newPrice").value;
@@ -26,55 +10,86 @@ function createJson(){
 
 
 
-function post() {
-    var params = createJson();
-    // The rest of this code assumes you are not using a library.
-    // It can be made less wordy if you use one.
-    var form = document.getElementById("newProductForm");
-
-    for(var key in params) {
-        if(params.hasOwnProperty(key)) {
-            var hiddenField = document.createElement("input");
-            hiddenField.setAttribute("type", "hidden");
-            hiddenField.setAttribute("name", key);
-            hiddenField.setAttribute("value", params[key]);
-
-            form.appendChild(hiddenField);
-         }
+function sendData(method) {
+  var params = createJson();
+  var form = document.getElementById("newProductForm");
+  form.method = method;
+  if(method =="PUT"){
+    form.action = form.action+ "/" +document.getElementById("lookUpID").value;
+    //return true;
+  }
+  for(var key in params) {
+    if(params.hasOwnProperty(key)) {
+      var hiddenField = document.createElement("input");
+      hiddenField.setAttribute("type", "hidden");
+      hiddenField.setAttribute("name", key);
+      hiddenField.setAttribute("value", params[key]);
+      form.appendChild(hiddenField);
     }
-
-    //document.body.appendChild(form);
-    form.submit();
+  }
+  form.submit();
 	form.style.display="none";
 }
 
 function displaySingleProd(json){
-	console.log(json);
-	//prodHolder
-	
+	var obj = json[0];
+  var holder = document.getElementById("prodHolder");
+  createLabel("ID:",holder,1);
+  createLabel(obj.ID,holder,2);
+  createLabel("Name:",holder,1);
+	createLabel(obj.NAME,holder,2);
+  createLabel("Price:",holder,1);
+	createLabel(obj.PRICE,holder,2);
+  createLabel("Description:",holder,1);
+  createLabel(obj.DESCRIPTION,holder,2);
 }
+
+
+function dynamicBreakline(container, num){
+  for (i = 0; i < num;++i){
+    var br =  document.createElement('br');
+    if(container.className == "faq-row"){
+      br.className = "prodQuestion";
+    }
+    container.appendChild(br);
+  }
+}
+
+/*
+* Creates a label to be added to the sheet
+*/
+function createLabel(question,parent,num){
+
+  var label = document.createElement('label');
+  label.innerHTML = question;
+  
+  parent.appendChild(label);
+  dynamicBreakline(parent, num);
+  return true;
+}
+
 
 function logResp(json){
 	console.log(json);
 }
 
-function doGet(endPoint,theUrl,callBack){
+function getData(method,theUrl,callBack){
 	var xhr = new XMLHttpRequest();
 	var response;
 	xhr.onreadystatechange = function() {
 	    if (xhr.readyState == XMLHttpRequest.DONE) {
-	        response =xhr.responseText;
-			if(endPoint=="DELETE"){
-				console.log(response);
-			}else{
-				callBack(JSON.parse(response));
-			}
+        response =xhr.responseText;
+        if(method=="DELETE"){
+				  console.log(response);
+        }else{
+				  callBack(JSON.parse(response));
+        }
 	    }
 	}
-	console.log(endPoint, theUrl);
-	xhr.open(endPoint, theUrl, true);
-	xhr.send(null);
+	xhr.open(method, theUrl, true);
+  xhr.send(null);
 }
+
 
 
 var summaryDataSet = [];

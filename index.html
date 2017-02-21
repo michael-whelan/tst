@@ -1,54 +1,47 @@
 <!DOCTYPE html>
 <html>
-    <head>
+	<head>
 	<script src="./javascript.js"></script>
-
+<link href="stylesheet.css" rel="stylesheet" type="text/css" media="screen" />
 <script src="https://code.jquery.com/jquery-1.8.3.min.js"></script>
 <script src="https://code.jquery.com/ui/1.10.0/jquery-ui.min.js"></script>
 <script src=" https://code.jquery.com/jquery-1.12.3.js"></script>
 <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script> 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
 
-        <title></title>
-        <meta charset='UTF-8'>
-        <meta name='viewport' content='width=device-width, initial-scale=1.0'>       
-    </head>
-    <body>
-	<button id = "btn1" onclick = "doGet('GET','http://localhost:3000/products', fillTable)">
-	Press me to GET
+		<title></title>
+		<meta charset='UTF-8'>
+		<meta name='viewport' content='width=device-width, initial-scale=1.0'>	   
+	</head>
+	<body>
+	<button id = "btn1" onclick = "getData('GET','http://localhost:3000/products', fillTable)">
+	Press to get all Products
 	</button>
-    <br>
-    <input id = "summaryTableBtn" type = "button" value = "Show Table"  onclick = "displaySummaryTable()" disabled = "true">
-    <br><br>
-    <table id="summaryTable" class="display" width="100%"></table> 
-    <form id ="newProductForm" method = "POST" target ="hiddenFrame"action = "http://localhost:3000/product">
-        <label>Name:</label>
-        <input id ="newName" type ="text"/><br>
-        <label>Price:</label>
-        <input id ="newPrice" type ="number"/><br>
-        <label>Description:</label>
-        <input id ="newDescription" type ="text"/>
-        <br><br>
-        <button id = "btnNewEntry" onclick = "post()">
-        Press me to add a product
-        </button>
-		<iframe name='hiddenFrame'  style='display:none'></iframe>
-    </form>
-	<div id ="controlSingleProd">
-		<label>Input ID</label>
-		<input type = "number" id = "lookUpID"/><br><br>
-		<label>InputName</label>
-		<input type = "text" id ="newName"/><br><br>
-		<label>Input Description</label>
-		<input type = "text" id = "newDescription"/><br><br>
-		<label>Input Price</label>
-		<input type = "number" id ="newPrice"/><br>
-		<div id ="prodHolder"></div>
-		<input type ="button" value="View" onclick="doGet('GET','http://localhost:3000/product/'+getValue('lookUpID'),displaySingleProd)"/>
-		<input type ="button" value="Update"/>
-		<input type ="button" value="Delete" onclick = "doGet('DELETE','http://localhost:3000/product/'+getValue('lookUpID'),logResp)"/>
-	</div>
-	
+	<br>
+
+	<input id = "summaryTableBtn" type = "button" value = "Show Table"  onclick = "displaySummaryTable()" disabled = "true">
+	<br><br>
+	<table id="summaryTable" class="display" width="100%" ></table> 
+
+	<form id ="newProductForm" method = "POST" target ="hiddenFrame" action = "http://localhost:3000/product">
+		<div id ="controlSingleProd">
+			<label>Input ID</label>
+			<input type = "number" id = "lookUpID"/><br><br>
+			<label>InputName</label>
+			<input type = "text" id ="newName"/><br><br>
+			<label>Input Description</label>
+			<input type = "text" id = "newDescription"/><br><br>
+			<label>Input Price</label>
+			<input type = "number" id ="newPrice"/><br><br>
+			<div id ="prodHolder"></div><br>
+			<input type ="button" value="View Product Details" onclick="getData('GET','http://localhost:3000/product/'+getValue('lookUpID'),displaySingleProd)"/>
+			<input type ="button" value="Delete" onclick = "getData('DELETE','http://localhost:3000/product/'+getValue('lookUpID'),logResp)"/>
+            <button id = "btnNewEntry" onclick = "sendData('POST')">
+            Press me to add a product
+            </button>
+        </div>
+        <iframe name='hiddenFrame'  style='display:none'></iframe>
+	</form>
 	
 	<script>
 		function getValue( id){
@@ -57,5 +50,5 @@
 		}
 	</script>
 	
-    </body>
+	</body>
 </html>

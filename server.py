@@ -29,6 +29,7 @@ class Handler (BaseHTTPRequestHandler) :
 		self.send_header("Access-Control-Allow-Headers", "X-Requested-With")
 		self.send_header("Access-Control-Allow-Headers", "Content-Type")
 		self.end_headers()
+		
 	def do_GET(self) :
 		# Look for main page
 		if self.path=="/":
@@ -118,7 +119,7 @@ class Handler (BaseHTTPRequestHandler) :
 			name = postvars.get('name')[0]
 			desc = postvars.get('description')[0]
 			price = float(postvars.get('price')[0])
-
+			print(name,desc,price)
 			# Send request to DB
 			db.updateOne(re.search(r'[^/]*$', self.path).group(0), name, desc, price)
 
