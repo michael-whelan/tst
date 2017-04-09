@@ -1,4 +1,5 @@
 -Starting the project -> py -m SimpleHTTPServer 8080
+	in another prompt -> py -m server.py
 
 -The "get all products" button will enable the show table button.
 - -This initializes the table. This table shows all the IDs, Names, Prices or all products in DB
