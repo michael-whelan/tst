@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<script src="./javascript.js"></script>
+<link href="stylesheet.css" rel="stylesheet" type="text/css" media="screen" />
+<script src="https://code.jquery.com/jquery-1.8.3.min.js"></script>
+<script src="https://code.jquery.com/ui/1.10.0/jquery-ui.min.js"></script>
+<script src=" https://code.jquery.com/jquery-1.12.3.js"></script>
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script> 
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+<script type="text/javascript">
+var fxml_url = 'http://eoghannolan:a2969fedbefb3968822d0d7f72a74f48bd1e9e41@flightxml.flightaware.com/json/FlightXML2/';
+
+
+// Fetch the planned route for a specified flight_id.
+function fetchAndRenderRoute(flight_id) {
+    $.ajax({
+       type: 'GET',
+       url: fxml_url + 'DecodeFlightRoute', 
+       data: { 'faFlightID': flight_id },
+       success : function(result) {
+           if (result.error) {
+               alert('Failed to decode route: ' + result.error);
+               return;
+           }
+
+           
+           console.log(result)
+           // Insert all of the points into the data table.
+           var points = result.DecodeFlightRouteResult.data;
+
+           
+       },
+       error: function(data, text) { alert('Failed to decode route: ' + data); },
+       dataType: 'jsonp',
+       jsonp: 'jsonp_callback',
+       xhrFields: { withCredentials: true }
+   });
+}
+
+</script>
+
+		<title></title>
+		<meta charset='UTF-8'>
+		<meta name='viewport' content='width=device-width, initial-scale=1.0'>	   
+	</head>
+	<body>
+		<select id="airportDrop" name="airportDrop" class="airportDrop">
+      <option value="0">Please Choose</option>
+      <option value="BHD" >Belfast City Airport (BHD)</option>
+      <br>
+      <option value="2" >Belfast International Airport (BFS)</option>
+      <br>
+      <option value="3">Cork Airport (ORK)</option>
+      <br>
+      <option value="4">Derry Airport (LDY)</option>
+      <br>
+      <option value="5">Donegal Airport (CFN)</option>
+      <br>
+      <option value="6">Dublin Airport (DUB)</option>
+      <br>
+      <option value="7">Ireland West Airport Knock (NOC)</option>
+      <br>
+      <option value="8">Kerry Airport (KIR)</option>
+    </select>
+    <button id = "ariportSelect" onclick = "getAirportInfo(getValue('airportDrop'))" type="button">Select Airport</button> 
+
+
+	<button id = "btn1" onclick = "fetchAndRenderRoute('UAL423-1492234002-airline-0219')">
+	Press to get all Items
+	</button>
+	<br>
+
+	<input id = "summaryTableBtn" type = "button" value = "Show Table"  onclick = "displaySummaryTable()" disabled = "true">
+	<br><br>
+	<table id="summaryTable" class="display" width="100%" ></table> 
+
+	<form id ="newProductForm" method = "POST" target ="hiddenFrame" action = "http://localhost:3000/product">
+		<div id ="controlSingleProd">
+			<label>Input ID</label>
+			<input type = "number" id = "lookUpID"/><br><br>
+			<label>InputName</label>
+			<input type = "text" id ="newName"/><br><br>
+			<label>Input Description</label>
+			<input type = "text" id = "newDescription"/><br><br>
+			<label>Input Price</label>
+			<input type = "number" id ="newPrice"/><br><br>
+			<div id ="prodHolder"></div><br>
+			<input type ="button" value="View Product Details" onclick="getData('GET','http://localhost:3000/product/'+getValue('lookUpID'),displaySingleProd)"/>
+			<input type ="button" value="Delete" onclick = "getData('DELETE','http://localhost:3000/product/'+getValue('lookUpID'),logResp)"/>
+            <button id = "btnNewEntry" onclick = "sendData('POST')">
+            Press me to add a product
+            </button>
+        </div>
+        <iframe name='hiddenFrame'  style='display:none'></iframe>
+	</form>
+	
+	<script>
+		function getValue( id){
+			var val = document.getElementById(id).value;
+			return val;
+		}
+			function getPort(id){
+			var port = document.getElementById(id).port;
+			return port;
+		}
+	</script>
+	
+	</body>
+</html>
